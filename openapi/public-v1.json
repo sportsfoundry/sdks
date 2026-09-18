@@ -1,0 +1,1736 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SportsFoundry Developer API",
+    "version": "1.0.0",
+    "description": "Stable customer contract over SportsFoundry canonical sports data. Supplier, routing, rights and operator implementation details are intentionally excluded.",
+    "x-sportsfoundry-canonical-openapi": "3.2.0",
+    "x-sportsfoundry-sdk-projection": "3.1.0"
+  },
+  "paths": {
+    "/api/v1/sports": {
+      "get": {
+        "operationId": "listSports",
+        "responses": {
+          "200": {
+            "description": "Sports",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SportCollection"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sports/{sportId}": {
+      "get": {
+        "operationId": "getSport",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SportId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sport",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sport"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/competitions": {
+      "get": {
+        "operationId": "listCompetitions",
+        "parameters": [
+          {
+            "name": "sportId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Competitions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompetitionCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        }
+      }
+    },
+    "/api/v1/competitions/{competitionId}": {
+      "get": {
+        "operationId": "getCompetition",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/CompetitionId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Competition",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Competition"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/editions": {
+      "get": {
+        "operationId": "listEditions",
+        "parameters": [
+          {
+            "name": "competitionId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Competition editions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EditionCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        }
+      }
+    },
+    "/api/v1/editions/{editionId}": {
+      "get": {
+        "operationId": "getEdition",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EditionId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Competition edition",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Edition"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/teams": {
+      "get": {
+        "operationId": "listTeams",
+        "parameters": [
+          {
+            "name": "sportId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "competitionEditionId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Teams",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeamCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        }
+      }
+    },
+    "/api/v1/teams/{teamId}": {
+      "get": {
+        "operationId": "getTeam",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TeamId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Team",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/events": {
+      "get": {
+        "operationId": "findEvents",
+        "parameters": [
+          {
+            "name": "competitionEditionId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "teamId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/EventStatus"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event page",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        }
+      }
+    },
+    "/api/v1/events/{eventId}": {
+      "get": {
+        "operationId": "getEvent",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/EventId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Event"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/venues": {
+      "get": {
+        "operationId": "listVenues",
+        "responses": {
+          "200": {
+            "description": "Venues",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VenueCollection"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/venues/{venueId}": {
+      "get": {
+        "operationId": "getVenue",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/VenueId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Venue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Venue"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/editions/{editionId}/standings": {
+      "get": {
+        "operationId": "getStandings",
+        "responses": {
+          "200": {
+            "description": "Current standings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandingsResource"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "editionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/teams/{teamId}/squad": {
+      "get": {
+        "operationId": "getCurrentSquad",
+        "responses": {
+          "200": {
+            "description": "Current squad",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SquadResource"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/players/{playerId}": {
+      "get": {
+        "operationId": "getPlayer",
+        "responses": {
+          "200": {
+            "description": "Player",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerResource"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "playerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/search": {
+      "get": {
+        "operationId": "searchFootball",
+        "responses": {
+          "200": {
+            "description": "Team and current-squad player search",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchCollection"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "SportId": {
+        "name": "sportId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "CompetitionId": {
+        "name": "competitionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "EditionId": {
+        "name": "editionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "TeamId": {
+        "name": "teamId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "EventId": {
+        "name": "eventId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "VenueId": {
+        "name": "venueId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "responses": {
+      "InvalidQuery": {
+        "description": "Invalid query",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Resource not found",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/Problem"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Problem": {
+        "type": "object",
+        "required": [
+          "type",
+          "title",
+          "status",
+          "detail"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "Sport": {
+        "type": "object",
+        "required": [
+          "id",
+          "code",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Competition": {
+        "type": "object",
+        "required": [
+          "id",
+          "sportId",
+          "code",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sportId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Edition": {
+        "type": "object",
+        "required": [
+          "id",
+          "competitionId",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "competitionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "startsOn": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "endsOn": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          }
+        }
+      },
+      "Team": {
+        "type": "object",
+        "required": [
+          "id",
+          "sportId",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sportId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "shortName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "Venue": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "EventStatus": {
+        "type": "string",
+        "enum": [
+          "SCHEDULED",
+          "POSTPONED",
+          "CANCELLED",
+          "DELAYED",
+          "IN_PROGRESS",
+          "SUSPENDED",
+          "COMPLETED",
+          "ABANDONED"
+        ]
+      },
+      "EventParticipant": {
+        "type": "object",
+        "required": [
+          "participantId",
+          "participantType",
+          "name"
+        ],
+        "properties": {
+          "participantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "participantType": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ordinal": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "seed": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        }
+      },
+      "EventScore": {
+        "type": "object",
+        "required": [
+          "participantId",
+          "scoreType"
+        ],
+        "properties": {
+          "participantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "periodId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "scoreType": {
+            "type": "string"
+          },
+          "numericValue": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "textValue": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "Event": {
+        "type": "object",
+        "required": [
+          "id",
+          "competitionEditionId",
+          "status",
+          "participants",
+          "scores"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "competitionEditionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "stageId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "roundId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "venueId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "status": {
+            "$ref": "#/components/schemas/EventStatus"
+          },
+          "scheduledStart": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "actualStart": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "actualEnd": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "participants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventParticipant"
+            }
+          },
+          "scores": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventScore"
+            }
+          }
+        }
+      },
+      "SportCollection": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Sport"
+            }
+          }
+        }
+      },
+      "CompetitionCollection": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Competition"
+            }
+          }
+        }
+      },
+      "EditionCollection": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Edition"
+            }
+          }
+        }
+      },
+      "TeamCollection": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Team"
+            }
+          }
+        }
+      },
+      "VenueCollection": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Venue"
+            }
+          }
+        }
+      },
+      "EventPage": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Event"
+            }
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "SourceHealth": {
+        "type": "object",
+        "required": [
+          "sourceId",
+          "sourceCode",
+          "sourceName",
+          "datasetId",
+          "datasetCode",
+          "datasetName"
+        ],
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sourceCode": {
+            "type": "string"
+          },
+          "sourceName": {
+            "type": "string"
+          },
+          "datasetId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "datasetCode": {
+            "type": "string"
+          },
+          "datasetName": {
+            "type": "string"
+          },
+          "admissionState": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "licence": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "commercialUseAllowed": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "redistributionAllowed": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "trustTier": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "rightsReviewedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "latestIngestionStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "latestIngestionStartedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "latestIngestionCompletedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "SourceHealthCollection": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SourceHealth"
+            }
+          }
+        }
+      },
+      "IngestionRun": {
+        "type": "object",
+        "required": [
+          "runId",
+          "datasetId",
+          "sourceCode",
+          "datasetCode",
+          "status",
+          "startedAt",
+          "triggerKind",
+          "correlationId"
+        ],
+        "properties": {
+          "runId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "datasetId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sourceCode": {
+            "type": "string"
+          },
+          "datasetCode": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "triggerKind": {
+            "type": "string"
+          },
+          "correlationId": {
+            "type": "string"
+          }
+        }
+      },
+      "IngestionRunCollection": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IngestionRun"
+            }
+          }
+        }
+      },
+      "IngestionIssue": {
+        "type": "object",
+        "required": [
+          "issueId",
+          "datasetId",
+          "sourceCode",
+          "datasetCode",
+          "ingestionRunId",
+          "severity",
+          "issueCode",
+          "message",
+          "recordedAt"
+        ],
+        "properties": {
+          "issueId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "datasetId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sourceCode": {
+            "type": "string"
+          },
+          "datasetCode": {
+            "type": "string"
+          },
+          "ingestionRunId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "externalRecordKey": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "INFO",
+              "WARNING",
+              "ERROR"
+            ]
+          },
+          "issueCode": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "recordedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "IngestionIssueCollection": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IngestionIssue"
+            }
+          }
+        }
+      },
+      "ExternalIdentity": {
+        "type": "object",
+        "required": [
+          "sourceCode",
+          "datasetCode",
+          "externalScope",
+          "externalId",
+          "resolutionStatus",
+          "resolvedAt"
+        ],
+        "properties": {
+          "sourceCode": {
+            "type": "string"
+          },
+          "datasetCode": {
+            "type": "string"
+          },
+          "externalScope": {
+            "type": "string"
+          },
+          "externalId": {
+            "type": "string"
+          },
+          "resolutionStatus": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "resolvedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "FieldProvenance": {
+        "type": "object",
+        "required": [
+          "sourceCode",
+          "datasetCode",
+          "fieldPath",
+          "sourceValue",
+          "decision",
+          "recordedAt"
+        ],
+        "properties": {
+          "sourceCode": {
+            "type": "string"
+          },
+          "datasetCode": {
+            "type": "string"
+          },
+          "fieldPath": {
+            "type": "string"
+          },
+          "sourceValue": {},
+          "decision": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "recordedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Reconciliation": {
+        "type": "object",
+        "required": [
+          "sourceCode",
+          "datasetCode",
+          "fieldPath",
+          "currentValue",
+          "candidateValue",
+          "decision",
+          "reason",
+          "recordedAt"
+        ],
+        "properties": {
+          "sourceCode": {
+            "type": "string"
+          },
+          "datasetCode": {
+            "type": "string"
+          },
+          "fieldPath": {
+            "type": "string"
+          },
+          "currentValue": {},
+          "candidateValue": {},
+          "decision": {
+            "type": "string"
+          },
+          "comparisonKind": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "EXACT_SUPPORT",
+              "NORMALIZED_SUPPORT",
+              "ALIAS_SUPPORT",
+              "MATERIAL_DISAGREEMENT",
+              null
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "recordedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AttributeEvidence": {
+        "type": "object",
+        "required": [
+          "sourceCode",
+          "datasetCode",
+          "attributePath",
+          "sourceValue",
+          "decision",
+          "recordedAt"
+        ],
+        "properties": {
+          "sourceCode": {
+            "type": "string"
+          },
+          "datasetCode": {
+            "type": "string"
+          },
+          "attributePath": {
+            "type": "string"
+          },
+          "sourceValue": {},
+          "decision": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "recordedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Alias": {
+        "type": "object",
+        "required": [
+          "alias",
+          "aliasType",
+          "languageCode"
+        ],
+        "properties": {
+          "alias": {
+            "type": "string"
+          },
+          "aliasType": {
+            "type": "string"
+          },
+          "languageCode": {
+            "type": "string"
+          }
+        }
+      },
+      "Provenance": {
+        "type": "object",
+        "required": [
+          "entityKind",
+          "entityId",
+          "externalIdentities",
+          "fields",
+          "reconciliations",
+          "attributes",
+          "aliases"
+        ],
+        "properties": {
+          "entityKind": {
+            "type": "string"
+          },
+          "entityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "externalIdentities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalIdentity"
+            }
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FieldProvenance"
+            }
+          },
+          "reconciliations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Reconciliation"
+            }
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AttributeEvidence"
+            }
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Alias"
+            }
+          }
+        }
+      },
+      "StandingResource": {
+        "type": "object",
+        "properties": {
+          "position": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teamId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teamName": {
+            "type": "string"
+          },
+          "played": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "won": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "drawn": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lost": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "goalsFor": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "goalsAgainst": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "goalDifference": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "basePoints": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pointsAdjustment": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "points": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unresolvedTie": {
+            "type": "boolean"
+          }
+        }
+      },
+      "StandingsResource": {
+        "type": "object",
+        "properties": {
+          "editionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "editionName": {
+            "type": "string"
+          },
+          "ruleset": {
+            "type": "string"
+          },
+          "completedMatches": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "evidenceAsOf": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StandingResource"
+            }
+          }
+        }
+      },
+      "SquadPlayerResource": {
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date"
+          },
+          "validTo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "role": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "jerseyNumber": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "SquadResource": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teamName": {
+            "type": "string"
+          },
+          "sourceCode": {
+            "type": "string"
+          },
+          "sourceDatasetId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "evidenceAsOf": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "players": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SquadPlayerResource"
+            }
+          }
+        }
+      },
+      "MembershipResource": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teamName": {
+            "type": "string"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date"
+          },
+          "validTo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "role": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "jerseyNumber": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "PlayerResource": {
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "currentMemberships": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MembershipResource"
+            }
+          },
+          "evidenceAsOf": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "SearchResource": {
+        "type": "object",
+        "properties": {
+          "entityType": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "secondaryText": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "SearchCollection": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SearchResource"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key",
+        "description": "Workspace-owned API credential. Full secrets are shown once and can be independently rotated or revoked."
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ]
+}
