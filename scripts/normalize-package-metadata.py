@@ -29,6 +29,7 @@ for path in (
         text = text.replace("https://github.com/GIT_USER_ID/GIT_REPO_ID.git", REPO + ".git")
         text = text.replace("https://github.com/GIT_USER_ID/GIT_REPO_ID", REPO)
         text = text.replace("http://localhost", "https://sportsfoundry.app")
+        text = text.replace('{name = "SportsFoundry",email = "team@openapitools.org"}', '{name = "SportsFoundry"}')
         path.write_text(text, encoding="utf-8")
 
 # NuGet package metadata lives in the generated csproj.
@@ -39,6 +40,7 @@ replacements = {
     r"<Description>.*?</Description>": f"<Description>{DESCRIPTION}</Description>",
     r"<Copyright>.*?</Copyright>": "<Copyright>Copyright SportsFoundry</Copyright>",
     r"<RepositoryUrl>.*?</RepositoryUrl>": f"<RepositoryUrl>{REPO}.git</RepositoryUrl>",
+    r"<PackageReleaseNotes>.*?</PackageReleaseNotes>": "<PackageReleaseNotes>Initial SportsFoundry SDK alpha release.</PackageReleaseNotes>",
 }
 for pattern, replacement in replacements.items():
     text = re.sub(pattern, replacement, text, flags=re.DOTALL)
@@ -56,4 +58,5 @@ if "<description>" in pom_text:
 else:
     pom_text = pom_text.replace("</name>", f"</name>\n    <description>{DESCRIPTION}</description>", 1)
 pom_text = re.sub(r"<url>.*?</url>", "<url>https://sportsfoundry.app</url>", pom_text, count=1, flags=re.DOTALL)
+pom_text = pom_text.replace("            <email>team@openapitools.org</email>\n", "")
 pom.write_text(pom_text, encoding="utf-8")
