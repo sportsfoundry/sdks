@@ -172,6 +172,4 @@ jobs:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
         run: |
           set -euo pipefail
-          mvn -B -f generated/java/pom.xml -Psign-artifacts \
-            -Dgpg.passphrase="$MAVEN_GPG_PASSPHRASE" \
-            deploy
+          mvn -B -f generated/java/pom.xml -Psign-artifacts deploy
