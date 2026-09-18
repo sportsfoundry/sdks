@@ -16,9 +16,9 @@ COMMON=(--git-host github.com --git-user-id SportsFoundry --git-repo-id sdks)
   --additional-properties="packageName=sportsfoundry,projectName=sportsfoundry,packageVersion=0.1.0a1,packageUrl=https://github.com/SportsFoundry/sdks"
 
 "${CLI[@]}" generate -g java -i "$SPEC" -o generated/java "${COMMON[@]}" \
-  --additional-properties="groupId=app.sportsfoundry,artifactId=sportsfoundry-java,artifactVersion=$VERSION,invokerPackage=app.sportsfoundry,apiPackage=app.sportsfoundry.api,modelPackage=app.sportsfoundry.model,library=native,artifactDescription=Official SportsFoundry Java SDK,artifactUrl=https://github.com/SportsFoundry/sdks,developerName=SportsFoundry,developerOrganization=SportsFoundry,developerOrganizationUrl=https://sportsfoundry.app,licenseName=Apache-2.0,licenseUrl=https://www.apache.org/licenses/LICENSE-2.0.html,scmConnection=scm:git:https://github.com/SportsFoundry/sdks.git,scmDeveloperConnection=scm:git:ssh://git@github.com/SportsFoundry/sdks.git,scmUrl=https://github.com/SportsFoundry/sdks"
+  --additional-properties="groupId=app.sportsfoundry,artifactId=sportsfoundry-java,artifactVersion=$VERSION,invokerPackage=app.sportsfoundry,apiPackage=app.sportsfoundry.api,modelPackage=app.sportsfoundry.model,library=native,artifactUrl=https://github.com/SportsFoundry/sdks,developerName=SportsFoundry,developerOrganization=SportsFoundry,developerOrganizationUrl=https://sportsfoundry.app,licenseName=Apache-2.0,licenseUrl=https://www.apache.org/licenses/LICENSE-2.0.html,scmConnection=scm:git:https://github.com/SportsFoundry/sdks.git,scmDeveloperConnection=scm:git:ssh://git@github.com/SportsFoundry/sdks.git,scmUrl=https://github.com/SportsFoundry/sdks"
 
 "${CLI[@]}" generate -g csharp -i "$SPEC" -o generated/dotnet "${COMMON[@]}" \
-  --additional-properties="packageName=SportsFoundry,packageVersion=$VERSION,targetFramework=net8.0,licenseId=Apache-2.0,packageAuthors=SportsFoundry,packageDescription=Official SportsFoundry .NET SDK,packageTitle=SportsFoundry SDK,packageTags=SportsFoundry;sports;api"
+  --additional-properties="packageName=SportsFoundry,packageVersion=$VERSION,targetFramework=net8.0,licenseId=Apache-2.0,packageAuthors=SportsFoundry,packageTags=SportsFoundry;sports;api"
 
 python3 scripts/normalize-package-metadata.py
