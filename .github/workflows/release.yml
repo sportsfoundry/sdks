@@ -12,6 +12,10 @@ on:
           - pypi
           - nuget
           - maven-central
+      nuget_user:
+        description: nuget.org profile username (required only for NuGet)
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -105,11 +109,17 @@ jobs:
           csproj="$(find generated/dotnet -path '*/src/SportsFoundry/SportsFoundry.csproj' -print -quit)"
           test -n "$csproj"
           dotnet pack "$csproj" -c Release -o dist/nuget
+      - name: Require NuGet profile username
+        shell: bash
+        env:
+          NUGET_USER: ${{ inputs.nuget_user }}
+        run: |
+          test -n "$NUGET_USER" || { echo "::error::nuget_user workflow input is required for NuGet publishing"; exit 1; }
       - name: Exchange GitHub OIDC token for NuGet API key
         uses: NuGet/login@v1
         id: nuget-login
         with:
-          user: ${{ vars.NUGET_USER }}
+          user: ${{ inputs.nuget_user }}
       - name: Publish NuGet alpha
         shell: bash
         run: dotnet nuget push dist/nuget/SportsFoundry.0.1.0-alpha.1.nupkg --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json

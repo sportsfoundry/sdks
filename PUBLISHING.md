@@ -14,7 +14,7 @@ Use GitHub repository `sportsfoundry/sdks` and workflow `release.yml`.
 
 npm, PyPI and NuGet use GitHub OIDC/trusted publishing. Do not add long-lived registry tokens to this repository for those registries.
 
-NuGet additionally needs repository variable `NUGET_USER`, set to the nuget.org profile username (not an email address).
+For a NuGet release, supply the nuget.org profile username (not an email address) in the workflow's `nuget_user` input. It is not stored as a repository secret or variable.
 
 ## Maven Central
 
