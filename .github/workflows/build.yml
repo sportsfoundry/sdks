@@ -41,7 +41,10 @@ jobs:
         run: |
           set -euo pipefail
           grep -q '"name": "@sportsfoundryapp/sdk"' generated/typescript/package.json
+          grep -q '"url": "https://github.com/SportsFoundry/sdks.git"' generated/typescript/package.json
+          grep -q '"license": "Apache-2.0"' generated/typescript/package.json
           grep -q 'name = "sportsfoundry"' generated/python/pyproject.toml || grep -q 'name="sportsfoundry"' generated/python/setup.py
+          ! grep -R --line-number 'GIT_USER_ID\|GIT_REPO_ID\|http://localhost' generated/typescript/package.json generated/python/pyproject.toml generated/python/README.md
           grep -q '<groupId>app.sportsfoundry</groupId>' generated/java/pom.xml
           grep -q '<artifactId>sportsfoundry-java</artifactId>' generated/java/pom.xml
           find generated/dotnet -name '*.csproj' -print -quit | grep -q .
@@ -67,7 +70,8 @@ jobs:
           set -euo pipefail
           mvn -B -f generated/java/pom.xml -DskipTests package
           mkdir -p dist/maven
-          find generated/java/target -maxdepth 1 -type f \( -name '*.jar' -o -name '*.pom' \) -exec cp {} dist/maven/ \;
+          find generated/java/target -maxdepth 1 -type f -name '*.jar' -exec cp {} dist/maven/ \;
+          cp generated/java/pom.xml dist/maven/sportsfoundry-java-0.1.0-alpha.1.pom
 
       - name: Build NuGet package
         shell: bash
