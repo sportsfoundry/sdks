@@ -1,0 +1,19 @@
+{
+  "schema_version": "sportsfoundry.sdk-manifest.v1",
+  "source_application_sha": "90ac4171ba0945e925689d94d4267df646141ddc",
+  "api_contract": "openapi/public-v1.json",
+  "canonical_contract_url": "https://sportsfoundry.app/openapi/public-v1.json",
+  "generator": {
+    "wrapper": "@openapitools/openapi-generator-cli@2.41.0",
+    "tool": "openapi-generator",
+    "version": "7.24.0",
+    "input_projection": "3.1.0"
+  },
+  "release": "0.1.0-alpha.1",
+  "targets": [
+    {"language":"typescript","registry":"npm","package":"@sportsfoundryapp/sdk"},
+    {"language":"python","registry":"PyPI","package":"sportsfoundry","version":"0.1.0a1"},
+    {"language":"java","registry":"Maven Central","group":"app.sportsfoundry","artifact":"sportsfoundry-java"},
+    {"language":"dotnet","registry":"NuGet","package":"SportsFoundry"}
+  ]
+}
