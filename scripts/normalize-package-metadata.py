@@ -45,3 +45,15 @@ for pattern, replacement in replacements.items():
 if "<PackageLicenseExpression>" not in text:
     text = text.replace("</PropertyGroup>", "  <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>\n    <PackageProjectUrl>https://sportsfoundry.app</PackageProjectUrl>\n  </PropertyGroup>", 1)
 csproj.write_text(text, encoding="utf-8")
+
+
+# Maven Central metadata: keep generator output, but replace generic project metadata.
+pom = Path("generated/java/pom.xml")
+pom_text = pom.read_text(encoding="utf-8")
+pom_text = re.sub(r"<name>.*?</name>", "<name>SportsFoundry Java SDK</name>", pom_text, count=1, flags=re.DOTALL)
+if "<description>" in pom_text:
+    pom_text = re.sub(r"<description>.*?</description>", f"<description>{DESCRIPTION}</description>", pom_text, count=1, flags=re.DOTALL)
+else:
+    pom_text = pom_text.replace("</name>", f"</name>\n    <description>{DESCRIPTION}</description>", 1)
+pom_text = re.sub(r"<url>.*?</url>", "<url>https://sportsfoundry.app</url>", pom_text, count=1, flags=re.DOTALL)
+pom.write_text(pom_text, encoding="utf-8")
