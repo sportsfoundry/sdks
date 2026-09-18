@@ -49,7 +49,7 @@ jobs:
           npm install --global npm@latest
           npm --version
       - name: Publish npm alpha
-        run: npm publish generated/typescript --access public --provenance
+        run: npm publish generated/typescript --access public --provenance --tag next
 
   pypi:
     if: inputs.registry == 'pypi'
