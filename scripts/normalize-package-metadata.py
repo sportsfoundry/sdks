@@ -47,7 +47,9 @@ replacements = {
 for pattern, replacement in replacements.items():
     text = re.sub(pattern, replacement, text, flags=re.DOTALL)
 if "<PackageLicenseExpression>" not in text:
-    text = text.replace("</PropertyGroup>", "  <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>\n    <PackageProjectUrl>https://sportsfoundry.app</PackageProjectUrl>\n  </PropertyGroup>", 1)
+    text = text.replace("</PropertyGroup>", "  <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>\n    <PackageProjectUrl>https://sportsfoundry.app</PackageProjectUrl>\n    <PackageReadmeFile>README.md</PackageReadmeFile>\n  </PropertyGroup>", 1)
+if '<None Include="README.md" Pack="true" PackagePath="\\\\" />' not in text:
+    text = text.replace("</Project>", '  <ItemGroup>\n    <None Include="README.md" Pack="true" PackagePath="\\\\" />\n  </ItemGroup>\n</Project>')
 csproj.write_text(text, encoding="utf-8")
 
 
