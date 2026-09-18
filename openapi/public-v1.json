@@ -5,7 +5,15 @@
     "version": "1.0.0",
     "description": "Stable customer contract over SportsFoundry canonical sports data. Supplier, routing, rights and operator implementation details are intentionally excluded.",
     "x-sportsfoundry-canonical-openapi": "3.2.0",
-    "x-sportsfoundry-sdk-projection": "3.1.0"
+    "x-sportsfoundry-sdk-projection": "3.1.0",
+    "contact": {
+      "name": "SportsFoundry",
+      "url": "https://sportsfoundry.app"
+    },
+    "license": {
+      "name": "Apache-2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    }
   },
   "paths": {
     "/api/v1/sports": {
@@ -1731,6 +1739,12 @@
   "security": [
     {
       "ApiKeyAuth": []
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://sportsfoundry.app",
+      "description": "SportsFoundry production API"
     }
   ]
 }
