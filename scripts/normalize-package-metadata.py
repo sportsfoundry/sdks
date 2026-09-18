@@ -5,7 +5,7 @@ import json
 import re
 from pathlib import Path
 
-REPO = "https://github.com/SportsFoundry/sdks"
+REPO = "https://github.com/sportsfoundry/sdks"
 DESCRIPTION = "Official SportsFoundry SDK generated from the canonical SportsFoundry Developer API contract."
 
 # npm metadata
@@ -61,4 +61,30 @@ else:
     pom_text = pom_text.replace("</name>", f"</name>\n    <description>{DESCRIPTION}</description>", 1)
 pom_text = re.sub(r"<url>.*?</url>", "<url>https://sportsfoundry.app</url>", pom_text, count=1, flags=re.DOTALL)
 pom_text = pom_text.replace("            <email>team@openapitools.org</email>\n", "")
+pom.write_text(pom_text, encoding="utf-8")
+
+
+# Maven Central Publisher Portal plugin. This is inert during ordinary package builds
+# and participates only when Maven deploy is explicitly invoked by release.yml.
+central_plugin = """
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.11.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                    <autoPublish>true</autoPublish>
+                    <waitUntil>published</waitUntil>
+                </configuration>
+            </plugin>
+"""
+if "central-publishing-maven-plugin" not in pom_text:
+    build_plugins = pom_text.find("<plugins>")
+    if build_plugins < 0:
+        raise SystemExit("generated Maven POM has no build/plugins section")
+    close_plugins = pom_text.find("</plugins>", build_plugins)
+    if close_plugins < 0:
+        raise SystemExit("generated Maven POM has no closing build/plugins section")
+    pom_text = pom_text[:close_plugins] + central_plugin + pom_text[close_plugins:]
 pom.write_text(pom_text, encoding="utf-8")
