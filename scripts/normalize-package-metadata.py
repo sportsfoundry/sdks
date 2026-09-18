@@ -23,6 +23,7 @@ npm_path.write_text(json.dumps(npm, indent=2) + "\n", encoding="utf-8")
 for path in (
     Path("generated/python/pyproject.toml"),
     Path("generated/python/README.md"),
+    Path("generated/python/setup.py"),
 ):
     if path.exists():
         text = path.read_text(encoding="utf-8")
@@ -30,6 +31,7 @@ for path in (
         text = text.replace("https://github.com/GIT_USER_ID/GIT_REPO_ID", REPO)
         text = text.replace("http://localhost", "https://sportsfoundry.app")
         text = text.replace('{name = "SportsFoundry",email = "team@openapitools.org"}', '{name = "SportsFoundry"}')
+        text = text.replace('    author_email="team@openapitools.org",\n', '')
         path.write_text(text, encoding="utf-8")
 
 # NuGet package metadata lives in the generated csproj.
