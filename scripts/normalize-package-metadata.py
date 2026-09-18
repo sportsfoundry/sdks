@@ -61,6 +61,30 @@ else:
     pom_text = pom_text.replace("</name>", f"</name>\n    <description>{DESCRIPTION}</description>", 1)
 pom_text = re.sub(r"<url>.*?</url>", "<url>https://sportsfoundry.app</url>", pom_text, count=1, flags=re.DOTALL)
 pom_text = pom_text.replace("            <email>team@openapitools.org</email>\n", "")
+# OpenAPI Generator currently emits Maven GPG Plugin 3.0.1 in its signing profile.
+# Central releases run non-interactively in GitHub Actions, so normalize that profile
+# onto the current plugin and its CI-safe environment-passphrase path.
+gpg_plugin_pattern = re.compile(
+    r"(<artifactId>maven-gpg-plugin</artifactId>\s*)<version>[^<]+</version>"
+)
+gpg_plugin_replacement = r"""\1<version>3.2.8</version>
+                        <configuration>
+                            <useAgent>false</useAgent>
+                            <passphraseEnvName>MAVEN_GPG_PASSPHRASE</passphraseEnvName>
+                            <bestPractices>true</bestPractices>
+                        </configuration>"""
+pom_text, gpg_plugin_count = gpg_plugin_pattern.subn(gpg_plugin_replacement, pom_text, count=1)
+if gpg_plugin_count != 1:
+    raise SystemExit("generated Maven POM signing profile was not found exactly once")
+for required in (
+    "<artifactId>maven-gpg-plugin</artifactId>",
+    "<version>3.2.8</version>",
+    "<useAgent>false</useAgent>",
+    "<passphraseEnvName>MAVEN_GPG_PASSPHRASE</passphraseEnvName>",
+    "<bestPractices>true</bestPractices>",
+):
+    if required not in pom_text:
+        raise SystemExit(f"generated Maven POM missing required signing configuration: {required}")
 pom.write_text(pom_text, encoding="utf-8")
 
 
